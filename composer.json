@@ -1,0 +1,22 @@
+{
+    "name": "bayareawebpro/laravel-micro-preset",
+    "authors": [
+        {
+            "name": "Dan Alvidrez",
+            "email": "dan@bayareawebpro.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "BayAreaWebPro\\LaravelMicroPreset\\": "src/"
+        }
+    },
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "BayAreaWebPro\\LaravelMicroPreset\\LaravelMicroPresetServiceProvider"
+            ]
+        }
+    }
+}
