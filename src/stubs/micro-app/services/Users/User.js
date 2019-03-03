@@ -5,9 +5,8 @@
 export default class User{
     /**
      * User Constructor
-     * @param Vue
      */
-    constructor(Vue) {
+    constructor() {
         this._state = {
             email: '',
             isAdmin: false,
