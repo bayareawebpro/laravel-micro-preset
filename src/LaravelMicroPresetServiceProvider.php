@@ -10,5 +10,9 @@ class LaravelMicroPresetServiceProvider extends ServiceProvider
 		PresetCommand::macro('laravelmicro', function(){
 			Preset::install();
 		});
+
+		$this->commands([
+			MakeMicroCommand::class
+		]);
 	}
 }

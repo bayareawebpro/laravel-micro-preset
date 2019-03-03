@@ -9,48 +9,56 @@ class Preset extends BasePreset
 {
 	/**
 	 * Install Preset.
-	 * @return void
+	 * @return array
 	 */
 	public static function install(){
-		self::addApp();
-		self::addBootstrap();
-		self::addWebpack();
+		$results = collect();
+		$results->put('micro-app', self::addApp());
+		$results->put('bootstrap', self::addBootstrap());
+		$results->put('webpack', self::addWebpack());
 		self::updatePackages(true);
+		return $results;
 	}
 
 	/**
 	 * Add App Directory
-	 * @return void
+	 * @return bool
 	 */
 	public static function addApp(){
 		$path = resource_path('js/micro-app');
 		if(!File::isDirectory($path)){
 			File::copyDirectory(__DIR__.'/stubs/micro-app', $path);
+			return true;
 		}
+		return false;
 	}
 
 	/**
 	 * Add Bootstrap Directory
-	 * @return void
+	 * @return bool
 	 */
 	public static function addBootstrap(){
 		$path = resource_path('js/bootstrap.js');
 		$bootstrap = File::get($path);
 		if(!Str::contains($bootstrap, 'micro-app/bootstrap')){
 			File::append($path, "require('./micro-app/bootstrap')");
+			return true;
 		}
+		return false;
 	}
 
 	/**
 	 * Add Webpack Config
-	 * @return void
+	 * @return bool
 	 */
 	public static function addWebpack(){
 		$path = base_path('webpack.mix.js');
 		$webpack = File::get($path);
 		if(!Str::contains($webpack, 'laravel-micro')){
 			File::append($path, File::get(__DIR__.'/stubs/webpack.mix.js'));
+			return true;
 		}
+		return false;
 	}
 
 	/**
