@@ -3,6 +3,8 @@
 # laravel-micro-present
 A Frontend Scaffolding Preset for LaravelMicro.js
 
-run  ``php artisan make:micro``.
+``composer require bayareawebpro/laravel-micro-preset``
+
+``php artisan make:micro``.
 
 ![](https://raw.githubusercontent.com/bayareawebpro/laravel-micro-preset/master/screenshot.png)
