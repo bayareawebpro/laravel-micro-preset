@@ -13,8 +13,7 @@
 	<div>
         <div class="flex-row flex-grow-0">
             <button @click="flush" class="btn btn-secondary btn-sm float-right">Flush</button>
-            <h2 class="text-primary">Logs</h2>
-            <p>Summary of the application container and loaded services.</p>
+            <h3>Logs</h3>
         </div>
         <div ref="scrollable" class="list-group scrollable border rounded">
             <div v-if="$app.logOutput.length === 0" class="list-group-item border-left-0 border-right-0">
