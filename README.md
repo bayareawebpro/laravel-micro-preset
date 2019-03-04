@@ -1,4 +1,4 @@
-This is a community project and not an official Laravel package.
+Disclaimer: This is a community project and not an official Laravel package.
 
 # LaravelMicro.js Laravel Installer
 
