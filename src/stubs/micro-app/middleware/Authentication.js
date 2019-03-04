@@ -1,57 +1,59 @@
-export default class Authentication{
-    constructor(App){
-        this.app = App
-    }
+export default class Authentication {
 
-    /**
-     * Handle Next.
-     * @param to
-     * @param from
-     * @param next
-     * @param nextMiddleware
-     * @return {*}
-     */
-    handle({to, from, next}, nextMiddleware){
+	constructor(App) {
+		this.app = App
+	}
 
-        console.log('middleware:auth:handle', {to, from, next})
+	/**
+	 * Handle Next.
+	 * @param to
+	 * @param from
+	 * @param next
+	 * @param nextPipe
+	 * @return {*}
+	 */
+	handle({to, from, next}, nextPipe) {
 
-        const response = {to, from, next}
+		console.log('middleware:auth:handle', {to, from, next})
 
+		const request = {to, from, next}
 
-        //Hook Into Next.
-        if(to.path.includes('super-root') && this.app.make('currentUser').state.isAdmin === false){
-            response.next = ()=>{
-                console.log('middleware:auth:handle:next:unauthorized')
-                next('/unauthorized') //redirect route
-            }
-        }else{
-            response.next = ()=>{
-                console.log('middleware:auth:handle:next')
-                next() //next route
-            }
-        }
+		const user = this.app.make('currentUser')
 
-        return nextMiddleware(response)
-    }
+		//Hook Into Next.
+		if (to.path.includes('super-root') && !user.isAdmin) {
+			request.next = () => {
+				console.log('middleware:auth:handle:next:unauthorized')
+				next('/unauthorized') //redirect route
+			}
+		} else {
+			request.next = () => {
+				console.log('middleware:auth:handle:next')
+				next() //next route
+			}
+		}
 
-    /**
-     * Terminate Next.
-     * @param to
-     * @param from
-     * @param nextMiddleware
-     * @return {*}
-     */
-    terminate({to, from}, nextMiddleware){
+		return nextPipe(request)
+	}
 
-        console.log('middleware:auth:terminate', {to, from})
+	/**
+	 * Terminate Next.
+	 * @param to
+	 * @param from
+	 * @param nextPipe
+	 * @return {*}
+	 */
+	terminate({to, from}, nextPipe) {
 
-        const response = {to, from}
+		console.log('middleware:auth:terminate', {to, from})
 
-        //Add Optional Next.
-        response.next = ()=>{
-            console.log('middleware:auth:terminate:next')
-        }
+		const request = {to, from}
 
-        return nextMiddleware(response)
-    }
+		//Add Optional Next.
+		request.next = () => {
+			console.log('middleware:auth:terminate:next')
+		}
+
+		return nextPipe(request)
+	}
 }

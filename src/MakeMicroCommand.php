@@ -20,7 +20,6 @@ class MakeMicroCommand extends Command
 
 	/**
 	 * Create a new command instance.
-	 *
 	 * @return void
 	 */
 	public function __construct()
@@ -43,6 +42,7 @@ class MakeMicroCommand extends Command
 		$this->line("4) Append options to bottom of webpack.mix.js - you may need to merge these options manually.");
 
 		if($this->askWithCompletion("Are you sure?", ['yes', 'no']) === 'yes'){
+
 			$results = Preset::install();
 
 			foreach($results as $process => $value){

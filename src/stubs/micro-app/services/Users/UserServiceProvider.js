@@ -1,40 +1,42 @@
 import {ServiceProvider} from "laravel-micro.js"
 import User from "./User"
-export default class UserServiceProvider extends ServiceProvider{
 
-    constructor(App) {
-        super(App)
-        this.app = App
-        this.deferred = true
-    }
+export default class UserServiceProvider extends ServiceProvider {
 
-    /**
-     * Register any application services.
-     * @return void
-     */
-    register() {
-        this.app.bind('User', User)
-        this.app.bind('currentUser', (User, Vue) => {
-            return Vue.observable(User.setInstance({
-                email: 'test@test.com',
-            }))
-        })
-    }
+	constructor(App) {
+		super(App)
+		this.app = App
+		this.deferred = true
+	}
 
-    /**
-     * Boot any application services.
-     * @return void
-     */
-    boot() {}
+	/**
+	 * Register any application services.
+	 * @return void
+	 */
+	register() {
+		this.app.bind('User', User)
+		this.app.bind('currentUser', (User, Vue) => {
+			return Vue.observable(User.setInstance({
+				email: 'test@test.com',
+			}))
+		})
+	}
 
-    /**
-     * Declare the aliases for the provided services.
-     * @return {Array}
-     */
-    get provides() {
-        return [
-            'User',
-            'currentUser',
-        ]
-    }
+	/**
+	 * Boot any application services.
+	 * @return void
+	 */
+	boot() {
+	}
+
+	/**
+	 * Declare the aliases for the provided services.
+	 * @return {Array}
+	 */
+	get provides() {
+		return [
+			'User',
+			'currentUser',
+		]
+	}
 }

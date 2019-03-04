@@ -68,7 +68,7 @@ class Preset extends BasePreset
 	 */
 	public static function updatePackageArray($packages){
 		return array_merge($packages, [
-			"laravel-micro.js"=> "^1.0.1",
+			"laravel-micro.js"=> "^1.0.2",
 			"vue-router"=> "^3.0.2"
 		]);
 	}

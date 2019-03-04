@@ -1,77 +1,61 @@
 import Vue from 'vue'
-import VueRouter from "vue-router"
 import {ServiceProvider} from "laravel-micro.js"
-import Unauthorized from '@pages/Unauthorized'
-import Protected from '@pages/Protected'
-import Edit from '@pages/Edit'
-import Root from '@pages/Root'
+import Routes from "./Routes"
+import VueRouter from "vue-router"
 
-export default class VueServiceProvider extends ServiceProvider{
-    constructor(App) {
-        super(App)
-        this.app = App
-        this.deferred = false
-    }
-    /**
-     * Register any application services.
-     * @return void
-     */
-    register() {
-        Vue.use(VueRouter)
-        Vue.prototype.$app = this.app
+export default class VueServiceProvider extends ServiceProvider {
 
-        this.app.bind('Vue', () => Vue)
-        this.app.bind('Events', () => new Vue)
-    }
+	constructor(App) {
+		super(App)
+		this.deferred = false
+	}
 
-    /**
-     * Boot any application services.
-     * @return void
-     */
-    boot() {
-        this.app.bind('Router', () => new VueRouter({
-            mode: 'hash',
-            base: '/',
-            routes: [
-                {
-                    path: '/',                  component: Root,
-                    children:[
-                        {path: '',              component: Edit },
-                        {path: 'super-root',    component: Protected },
-                        {path: 'unauthorized',  component: Unauthorized },
-                        {path: '*',             component: Unauthorized },
-                    ]
-                },
-            ]
-        }))
-        this.app.bind('VueRoot', (Router, Events) => {
+	/**
+	 * Register any application services.
+	 * @return void
+	 */
+	register() {
+		Vue.use(VueRouter)
+		Vue.prototype.$app = this.app
 
-            Router.beforeEach((to, from, next) => {
-                Events.$emit('route:before', {to, from, next})
-                this.app.dispatch({to, from, next})
-            })
+		this.app.bind('Vue', () => Vue)
+		this.app.bind('Events', new Vue)
+		this.app.bind('Router', () => {
+			const router = new VueRouter(Routes)
+			router.beforeEach((to, from, next) => {
+				this.app.dispatch({to, from, next})
+			})
+			router.afterEach((to, from) => {
+				this.app.terminate({to, from})
+			})
+			return router
+		})
 
-            Router.afterEach((to, from) => {
-                Events.$emit('route:after', {to, from})
-                this.app.terminate({to, from})
-            })
+		this.app.bind('VueRoot', (Router) => {
+			return new Vue({
+				router: Router,
+				template: `<router-view/>`
+			})
+		})
+	}
 
-            return new Vue({
-                router: Router,
-                template: `<router-view/>`
-            })
-        })
-    }
+	/**
+	 * Boot any application services.
+	 * @return void
+	 */
+	boot() {
+	}
 
-    /**
-     * Declare the aliases for the provided services.
-     * @return {Array}
-     */
-    get provides() {
-        return [
-            'Vue',
-            'VueRoot',
-            'Router',
-        ]
-    }
+	/**
+	 * Declare the aliases for the provided services.
+	 * @return {Array}
+	 */
+	get provides() {
+		return [
+			'Vue',
+			'Events',
+			'Router',
+			'VueRoot',
+		]
+	}
 }
