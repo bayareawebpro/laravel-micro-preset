@@ -1,9 +1,8 @@
 <script>
-	import Bindings from '../components/Bindings'
-	import Logs from '../components/Logs'
-	import Sharing from '../components/Sharing'
-	import Providers from '../components/Providers'
-
+	import Providers from '../components/bootstrap/Providers'
+	import Bindings from '../components/bootstrap/Bindings'
+	import Sharing from '../components/bootstrap/Sharing'
+	import Logs from '../components/bootstrap/Logs'
 	export default {
 		name: "Components",
 		components: {
